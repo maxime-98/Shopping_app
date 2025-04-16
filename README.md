@@ -1,111 +1,80 @@
-# 🧾 Documentation des microservices de l'application Shopping-App
+# 🧾 Shopping-App Microservices Documentation
 
-## 📦 Architecture Générale
+## 📦 General Architecture
 
-L'application est divisée en 6 microservices communiquant entre eux, avec une base MongoDB partagée sur des bases différentes par service.
+The application is built with 6 microservices communicating through HTTP and using a shared MongoDB instance (each service has its own database).
 
-### 🔗 Schéma logique (simplifié)
+### 🔗 Logical Architecture (Simplified)
 
-```
- Utilisateur (via frontend ou Postman)
-        |
-        v
-   [ user-service ] ←→ JWT
-        |
-        v
-   [ list-service ] ←→ [ product-service ]
-        |                    |
-        v                    v
-   [ compare-service ]   [ scraper-service ]
-        |
-        v
-     Résultat (meilleur magasin)
-
- Tous se connectent à :
-   [ mongo ]
-```
 
 ---
 
-## 🧠 Description des microservices
+## 🧠 Microservice Overview
 
 ### 1. `user-service` (port 3003)
-- Gère l'authentification, les tokens et les utilisateurs
+Manages user accounts, authentication (JWT), refresh tokens, roles, favorites, and history.
 
-| Endpoint         | Méthode | Authentification | Description                        |
-|------------------|---------|------------------|------------------------------------|
-| `/users/register` | POST    | ❌               | Inscription d'un utilisateur       |
-| `/users/login`    | POST    | ❌               | Connexion, retourne un JWT         |
-| `/users/me`       | GET     | ✅               | Infos utilisateur connecté         |
+| Endpoint              | Method | Auth Required | Description                                      |
+|-----------------------|--------|---------------|--------------------------------------------------|
+| `/users/register`     | POST   | ❌            | Register a new user                              |
+| `/users/login`        | POST   | ❌            | Login, returns access & refresh tokens           |
+| `/users/refresh`      | POST   | ❌            | Refresh access token using refresh token         |
+| `/users/logout`       | POST   | ❌            | Logout, invalidates refresh token                |
+| `/users/me`           | GET    | ✅            | Get current logged-in user info                  |
+| `/users/favorites`    | POST   | ✅            | Add a product to favorites                       |
+| `/users/favorites`    | GET    | ✅            | Get all favorite products                        |
+| `/users/favorites/:id`| DELETE | ✅            | Remove a product from favorites                  |
+
+---
 
 ### 2. `product-service` (port 3000)
-- Gère les produits disponibles (nom, marque, prix par magasin)
+Handles product catalog with name, brand, category, and prices per store.
 
-| Endpoint         | Méthode | Authentification | Description                        |
-|------------------|---------|------------------|------------------------------------|
-| `/products`       | GET     | ❌               | Liste de tous les produits         |
-| `/products/:id`   | GET     | ❌               | Détail d’un produit                |
-| `/products`       | POST    | ✅ (admin à venir) | Création de produit               |
+| Endpoint          | Method | Auth Required | Description                             |
+|-------------------|--------|---------------|-----------------------------------------|
+| `/products`       | GET    | ❌            | Get all available products              |
+| `/products/:id`   | GET    | ❌            | Get a single product by ID              |
+| `/products`       | POST   | ✅ (admin)    | Add a new product (admin only)          |
+
+---
 
 ### 3. `list-service` (port 3001)
-- Gère les listes de courses des utilisateurs
+Manages shopping lists for users, including creation, deletion, history, and duplication.
 
-| Endpoint         | Méthode | Authentification | Description                                 |
-|------------------|---------|------------------|---------------------------------------------|
-| `/lists`          | GET     | ✅               | Liste des courses de l’utilisateur          |
-| `/lists`          | POST    | ✅               | Crée une nouvelle liste                     |
-| `/lists/:id`      | DELETE  | ✅               | Supprime une liste appartenant à l’utilisateur |
+| Endpoint                 | Method | Auth Required | Description                                     |
+|--------------------------|--------|---------------|-------------------------------------------------|
+| `/lists`                 | GET    | ✅            | Get all user lists                              |
+| `/lists`                 | POST   | ✅            | Create a new list                               |
+| `/lists/:id`             | DELETE | ✅            | Delete a user’s list                            |
+| `/lists/history`         | GET    | ✅            | Get full list history for the user              |
+| `/lists/:id/archive`     | PATCH  | ✅            | Archive a list                                  |
+| `/lists/:id/duplicate`   | POST   | ✅            | Duplicate an existing list                      |
+
+---
 
 ### 4. `compare-service` (port 3002)
-- Compare les prix de chaque produit d’une liste et indique le magasin le moins cher
+Compares the prices of products in a list and suggests the cheapest store.
 
-| Endpoint         | Méthode | Authentification | Description                               |
-|------------------|---------|------------------|-------------------------------------------|
-| `/compare`        | POST    | ❌               | Compare une liste de produits             |
+| Endpoint                  | Method | Auth Required | Description                                          |
+|---------------------------|--------|---------------|------------------------------------------------------|
+| `/compare`                | POST   | ❌            | Compare total prices for a list of products          |
+| `/compare/intelligent` *(coming soon)* | POST | ❌ | Suggest best store per product & highlight savings   |
+
+---
 
 ### 5. `scraper-service` (port 3004)
-- Injecte automatiquement des produits dans le `product-service` depuis une source statique ou dynamique
+Automatically inserts products into `product-service` using static or dynamic sources.
 
-| Endpoint         | Méthode | Authentification | Description                               |
-|------------------|---------|------------------|-------------------------------------------|
-| `/scrape`         | GET     | ❌               | Lance le scraping (mock ou réel)          |
+| Endpoint     | Method | Auth Required | Description                                    |
+|--------------|--------|---------------|------------------------------------------------|
+| `/scrape`    | GET    | ❌            | Starts scraping (uses internal admin login)    |
+
+---
 
 ### 6. `mongo` (port 27017)
-- Conteneur unique, utilisé par tous les services avec des bases différentes :
-  - `products`, `lists`, `users`
+Single MongoDB container used by all services. Each microservice uses its own database:
+- `users`, `products`, `lists`
 
 ---
 
-## 🗂️ Accès public / Exposition des services
-
-Pour tester l'application publiquement sans déploiement complet, on peut utiliser :
-
-### 🌍 [Ngrok](https://ngrok.com/)
-
-```bash
-ngrok http 3001  # pour exposer le list-service
-ngrok http 3000  # pour exposer le product-service
-ngrok http 3003  # pour exposer le user-service
-```
-
-Il suffit ensuite de remplacer `http://localhost:3001` par l’URL `https://xxxx.ngrok.io` dans Postman ou le frontend.
-
----
-
-## ✅ À faire ensuite (backend)
-
-- Ajouter des rôles `admin`/`user` dans le user-service
-- Restreindre `/products` POST aux admins
-- Créer un service `store-service` pour gérer les magasins avec adresse/GPS
-- Ajouter un historique utilisateur et favoris
-- Implémenter un refresh token (JWT durable)
-
----
-
-Tu peux maintenant t'appuyer sur cette doc pour :
-- 🧪 faire tes tests proprement
-- 🖥️ construire un frontend organisé
-- 💬 montrer ton travail à des collègues, mentors, ou recruteurs
-
-Et je peux aussi te générer une **carte visuelle (diagramme)** si tu veux une version image 📊
-
+Let me know if you’d like a `docker-compose.prod.yml` section, a `setup` guide, or how to host it on services like Railway, Fly.io, or Render for free deployment 🚀

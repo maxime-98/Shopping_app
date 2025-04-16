@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  product-service:
+    build: ./product-service
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/products
+      - JWT_SECRET=supersecretkey123
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+
+  list-service:
+    build: ./list-service
+    ports:
+      - "3001:3001"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/lists
+    depends_on:
+      - mongo
+
+  compare-service:
+    build: ./compare-service
+    ports:
+      - "3002:3002"
+    depends_on:
+      - product-service
+
+  user-service:
+    build: ./user-service
+    ports:
+      - "3003:3003"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/users
+      - JWT_SECRET=supersecretkey123
+    depends_on:
+      - mongo
+
+  scraper-service:
+    build: ./scraper-service
+    ports:
+      - "3004:3004"
+    depends_on:
+      - product-service
+    environment:
+      - PRODUCT_SERVICE_URL=http://product-service:3000/products

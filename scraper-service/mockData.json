@@ -1,0 +1,109 @@
+[
+    {
+      "name": "Lait demi-écrémé",
+      "brand": "Président",
+      "category": "Alimentaire",
+      "prices": [
+        { "store": "Carrefour", "price": 1.35 },
+        { "store": "Leclerc", "price": 1.25 }
+      ]
+    },
+    {
+      "name": "Pâtes Barilla",
+      "brand": "Barilla",
+      "category": "Épicerie",
+      "prices": [
+        { "store": "Carrefour", "price": 1.20 },
+        { "store": "Intermarché", "price": 1.15 }
+      ]
+    },
+    {
+      "name": "Pain complet",
+      "brand": "Harrys",
+      "category": "Boulangerie",
+      "prices": [
+        { "store": "Carrefour", "price": 2.00 },
+        { "store": "Leclerc", "price": 1.90 }
+      ]
+    },
+    {
+      "name": "Yaourt nature",
+      "brand": "Danone",
+      "category": "Produits laitiers",
+      "prices": [
+        { "store": "Carrefour", "price": 2.50 },
+        { "store": "Intermarché", "price": 2.40 }
+      ]
+    },
+    {
+      "name": "Jus d'orange",
+      "brand": "Tropicana",
+      "category": "Boissons",
+      "prices": [
+        { "store": "Carrefour", "price": 3.00 },
+        { "store": "Leclerc", "price": 2.90 },
+        { "store": "Auchan", "price": 2.95 }
+      ]
+    },
+    {
+      "name": "Café moulu",
+      "brand": "Lavazza",
+      "category": "Épicerie",
+      "prices": [
+        { "store": "Carrefour", "price": 4.50 },
+        { "store": "Intermarché", "price": 4.40 },
+        { "store": "Monoprix", "price": 4.45 }
+      ]
+    },
+    {
+      "name": "Beurre doux",
+      "brand": "Président",
+      "category": "Produits laitiers",
+      "prices": [
+        { "store": "Carrefour", "price": 2.80 },
+        { "store": "Leclerc", "price": 2.70 },
+        { "store": "Auchan", "price": 2.75 }
+      ]
+    },
+    {
+      "name": "Œufs bio",
+      "brand": "Matines",
+      "category": "Alimentaire",
+      "prices": [
+        { "store": "Carrefour", "price": 3.20 },
+        { "store": "Intermarché", "price": 3.10 },
+        { "store": "Monoprix", "price": 3.15 }
+      ]
+    },
+    {
+      "name": "Farine de blé",
+      "brand": "Francine",
+      "category": "Épicerie",
+      "prices": [
+        { "store": "Carrefour", "price": 1.50 },
+        { "store": "Leclerc", "price": 1.40 },
+        { "store": "Auchan", "price": 1.45 }
+      ]
+    },
+    {
+      "name": "Huile d'olive",
+      "brand": "Puget",
+      "category": "Épicerie",
+      "prices": [
+        { "store": "Carrefour", "price": 5.00 },
+        { "store": "Intermarché", "price": 4.90 },
+        { "store": "Monoprix", "price": 4.95 }
+      ]
+    },
+    {
+      "name": "Confiture de fraises",
+      "brand": "Bonne Maman",
+      "category": "Épicerie",
+      "prices": [
+        { "store": "Carrefour", "price": 3.50 },
+        { "store": "Leclerc", "price": 3.40 },
+        { "store": "Auchan", "price": 3.45 }
+      ]
+    }
+  ]
+  

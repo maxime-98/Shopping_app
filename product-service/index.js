@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const { swaggerUi, specs } = require('./swagger');
 require('dotenv').config();
 
 const productRoutes = require('./routes/productRoutes');
@@ -7,7 +8,11 @@ const productRoutes = require('./routes/productRoutes');
 const app = express();
 app.use(express.json());
 
-// Connect to MongoDB
+// Swagger UI + JSON
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(specs));
+app.get('/swagger.json', (req, res) => res.json(specs)); // ✅ À ajouter
+
+// MongoDB
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,

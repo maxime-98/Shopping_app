@@ -5,6 +5,20 @@ const ShoppingList = require('../models/ShoppingList');
 const auth = require('../middleware/auth');
 
 // GET all lists with product info
+/**
+ * @swagger
+ * /lists:
+ *   get:
+ *     summary: Récupérer toutes les listes de l'utilisateur connecté
+ *     tags: [Lists]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Listes récupérées avec succès
+ *       401:
+ *         description: Non autorisé
+ */
 router.get('/', auth, async (req, res) => {
   try {
     const lists = await ShoppingList.find({ userId: req.user.id });
@@ -40,6 +54,45 @@ router.get('/', auth, async (req, res) => {
 });
 
 // POST new shopping list
+/**
+ * @swagger
+ * /lists:
+ *   post:
+ *     summary: Créer une nouvelle liste de courses
+ *     tags: [Lists]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - items
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: Courses de la semaine
+ *               items:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   required: [productId, quantity]
+ *                   properties:
+ *                     productId:
+ *                       type: string
+ *                       example: 661fc1abc1d4f1234567890a
+ *                     quantity:
+ *                       type: integer
+ *                       example: 2
+ *     responses:
+ *       201:
+ *         description: Liste créée
+ *       400:
+ *         description: Données invalides
+ */
 router.post('/', auth, async (req, res) => {
   try {
     const listData = req.body;
@@ -53,6 +106,29 @@ router.post('/', auth, async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /lists/{id}:
+ *   delete:
+ *     summary: Supprimer une liste spécifique
+ *     tags: [Lists]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID de la liste
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Liste supprimée
+ *       403:
+ *         description: Non autorisé
+ *       404:
+ *         description: Liste introuvable
+ */
 router.delete('/:id', auth, async (req, res) => {
   try {
     const list = await ShoppingList.findById(req.params.id);
@@ -72,6 +148,20 @@ router.delete('/:id', auth, async (req, res) => {
 });
 
 // 🔁 Historique = toutes les listes de l'utilisateur, même anciennes
+/**
+ * @swagger
+ * /lists/history:
+ *   get:
+ *     summary: Récupérer l'historique des listes de l'utilisateur
+ *     tags: [Lists]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Historique récupéré
+ *       401:
+ *         description: Non autorisé
+ */
 router.get('/history', auth, async (req, res) => {
   try {
     const lists = await ShoppingList.find({ userId: req.user.id }).sort({ createdAt: -1 });
@@ -82,6 +172,27 @@ router.get('/history', auth, async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /lists/{id}/archive:
+ *   patch:
+ *     summary: Archiver une liste
+ *     tags: [Lists]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID de la liste
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Liste archivée
+ *       404:
+ *         description: Liste introuvable ou non autorisée
+ */
 router.patch('/:id/archive', auth, async (req, res) => {
   try {
     const list = await ShoppingList.findById(req.params.id);
@@ -98,6 +209,27 @@ router.patch('/:id/archive', auth, async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /lists/{id}/duplicate:
+ *   post:
+ *     summary: Dupliquer une liste existante
+ *     tags: [Lists]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID de la liste à dupliquer
+ *         schema:
+ *           type: string
+ *     responses:
+ *       201:
+ *         description: Nouvelle liste dupliquée
+ *       404:
+ *         description: Liste introuvable ou non autorisée
+ */
 router.post('/:id/duplicate', auth, async (req, res) => {
   try {
     const originalList = await ShoppingList.findById(req.params.id);
@@ -119,6 +251,18 @@ router.post('/:id/duplicate', auth, async (req, res) => {
 });
 
 // DELETE all shopping lists (⚠️ à n’utiliser que pour les tests)
+/**
+ * @swagger
+ * /lists:
+ *   delete:
+ *     summary: Supprimer toutes les listes (tests uniquement)
+ *     tags: [Lists]
+ *     responses:
+ *       200:
+ *         description: Toutes les listes supprimées
+ *       500:
+ *         description: Erreur serveur
+ */
 router.delete('/', async (req, res) => {
   try {
     await ShoppingList.deleteMany({});

@@ -1,7 +1,7 @@
 {
-  "name": "list-service",
+  "name": "global-importer",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "importAll.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -12,10 +12,6 @@
   "dependencies": {
     "axios": "^1.8.4",
     "dotenv": "^16.5.0",
-    "express": "^5.1.0",
-    "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.13.2",
-    "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.1"
+    "mongoose": "^8.13.2"
   }
 }

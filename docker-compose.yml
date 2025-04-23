@@ -51,3 +51,23 @@ services:
       - product-service
     environment:
       - PRODUCT_SERVICE_URL=http://product-service:3000/products
+
+  store-service:
+    build: ./store-service
+    ports:
+      - "3005:3005"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/stores
+    depends_on:
+      - mongo
+
+  docs-gateway:
+    build: ./docs-gateway
+    ports:
+      - "4000:4000"
+    depends_on:
+      - product-service
+      - list-service
+      - compare-service
+      - user-service
+      - store-service

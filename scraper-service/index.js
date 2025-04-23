@@ -9,7 +9,9 @@ const app = express();
 app.use(express.json());
 
 let adminToken = null;
+let storeMap = {};
 
+// 🔐 Connexion admin
 async function loginAsAdmin() {
   try {
     const res = await axios.post(process.env.USER_SERVICE_URL, {
@@ -20,12 +22,28 @@ async function loginAsAdmin() {
     console.log("✅ Token reçu :", adminToken);
   } catch (err) {
     console.error("❌ Erreur login admin :", err.response?.data || err.message);
-    adminToken = null; // sécurité
+    adminToken = null;
   }
 }
 
+// 🏪 Chargement des magasins
+async function loadStores() {
+  try {
+    const res = await axios.get('http://store-service:3005/stores');
+    for (const store of res.data) {
+      storeMap[store.name] = store._id;
+    }
+    console.log("✅ Magasins chargés :", Object.keys(storeMap));
+  } catch (err) {
+    console.error("❌ Erreur lors du chargement des magasins :", err.message);
+    storeMap = {};
+  }
+}
+
+// 🚀 Route de scraping
 app.get('/scrape', async (req, res) => {
   await loginAsAdmin();
+  await loadStores();
 
   if (!adminToken) {
     return res.status(401).json({
@@ -35,7 +53,21 @@ app.get('/scrape', async (req, res) => {
 
   const results = [];
 
-  for (const product of mockData) {
+  for (const rawProduct of mockData) {
+    const product = { ...rawProduct };
+
+    // Conversion store → storeId
+    product.prices = product.prices
+      .map(({ store, price }) => {
+        const storeId = storeMap[store];
+        if (!storeId) {
+          console.warn(`⚠️ Magasin non trouvé : ${store}`);
+          return null;
+        }
+        return { storeId, price };
+      })
+      .filter(Boolean); // retirer ceux qui ont échoué
+
     try {
       const response = await axios.post(process.env.PRODUCT_SERVICE_URL, product, {
         headers: {

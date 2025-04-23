@@ -6,8 +6,8 @@ const productSchema = new mongoose.Schema({
   category: { type: String },
   prices: [
     {
-      store: { type: String, required: true }, // Ex: Carrefour, Lidl
-      price: { type: Number, required: true },
+      storeId: { type: mongoose.Schema.Types.ObjectId, required: true },
+      price: { type: Number, required: true }
     }
   ]
 }, { timestamps: true });

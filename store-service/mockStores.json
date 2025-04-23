@@ -1,0 +1,108 @@
+[
+    {
+      "name": "Carrefour Paris République",
+      "address": "15 Rue du Temple",
+      "city": "Paris",
+      "region": "Île-de-France",
+      "type": "Supermarché"
+    },
+    {
+      "name": "Leclerc Toulouse Sud",
+      "address": "28 Avenue de Muret",
+      "city": "Toulouse",
+      "region": "Occitanie",
+      "type": "Hypermarché"
+    },
+    {
+      "name": "Intermarché Lyon Part-Dieu",
+      "address": "7 Rue Garibaldi",
+      "city": "Lyon",
+      "region": "Auvergne-Rhône-Alpes",
+      "type": "Supermarché"
+    },
+    {
+      "name": "Auchan Bordeaux Centre",
+      "address": "21 Cours Alsace-Lorraine",
+      "city": "Bordeaux",
+      "region": "Nouvelle-Aquitaine",
+      "type": "Supermarché"
+    },
+    {
+      "name": "Lidl Lille Fives",
+      "address": "11 Rue Pierre Legrand",
+      "city": "Lille",
+      "region": "Hauts-de-France",
+      "type": "Discount"
+    },
+    {
+      "name": "Monoprix Paris Montparnasse",
+      "address": "31 Rue du Départ",
+      "city": "Paris",
+      "region": "Île-de-France",
+      "type": "Supermarché"
+    },
+    {
+      "name": "Casino Supermarché Marseille Prado",
+      "address": "120 Avenue du Prado",
+      "city": "Marseille",
+      "region": "Provence-Alpes-Côte d'Azur",
+      "type": "Supermarché"
+    },
+    {
+      "name": "Super U Nantes Centre",
+      "address": "5 Rue de la Paix",
+      "city": "Nantes",
+      "region": "Pays de la Loire",
+      "type": "Supermarché"
+    },
+    {
+      "name": "Géant Casino Montpellier Odysseum",
+      "address": "2 Place de Lisbonne",
+      "city": "Montpellier",
+      "region": "Occitanie",
+      "type": "Hypermarché"
+    },
+    {
+      "name": "Carrefour Market Nice Garibaldi",
+      "address": "12 Place Garibaldi",
+      "city": "Nice",
+      "region": "Provence-Alpes-Côte d'Azur",
+      "type": "Supermarché"
+    },
+    {
+      "name": "Leclerc Drive Strasbourg Sud",
+      "address": "15 Rue de l'Industrie",
+      "city": "Strasbourg",
+      "region": "Grand Est",
+      "type": "Drive"
+    },
+    {
+      "name": "Auchan Supermarché Rennes Alma",
+      "address": "1 Rue du Bosphore",
+      "city": "Rennes",
+      "region": "Bretagne",
+      "type": "Supermarché"
+    },
+    {
+      "name": "Lidl Rouen Centre",
+      "address": "8 Rue Jeanne d'Arc",
+      "city": "Rouen",
+      "region": "Normandie",
+      "type": "Discount"
+    },
+    {
+      "name": "Intermarché Super Grenoble",
+      "address": "20 Boulevard Maréchal Foch",
+      "city": "Grenoble",
+      "region": "Auvergne-Rhône-Alpes",
+      "type": "Supermarché"
+    },
+    {
+      "name": "Picard Versailles",
+      "address": "25 Rue des Réservoirs",
+      "city": "Versailles",
+      "region": "Île-de-France",
+      "type": "Magasin de surgelés"
+    }
+  ]
+  
